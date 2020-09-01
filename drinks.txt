@@ -1,7 +1,0 @@
-Beer
-Wine
-Coffee
-Tea
-Orange-Juice
-Fanta
-Sprite

@@ -1,65 +1,72 @@
 import os
 
+from classes import Person, Drink, Preference, Round
 
-def read_data(file_name):
-    idx = 0
-    data = {}
+
+def read_lines(file_name):
     try:
         the_file = open(file_name, "r")
         lines = the_file.readlines()
+    except:
+        return []
+    return lines
 
-        for line in lines:
-            data.update({idx: line.strip()})
-            idx += 1
 
-        the_file.close()
-
-    except FileNotFoundError:
-        print(f"{file_name} not found")
-
+def get_people():
+    lines = read_lines("people.txt")
+    data = []
+    for line in lines:
+        data.append(Person(line.strip()))
     return data
 
 
-def write_data(file_name, data):
-    try:
-        the_file = open(file_name, "w")
-
-        for line in data.values():
-            the_file.write(line + "\n")
-    finally:
-        the_file.close()
+def get_drinks():
+    lines = read_lines("drinks.txt")
+    data = []
+    for line in lines:
+        data.append(Drink(line.strip()))
+    return data
 
 
-def save_and_exit():
-    write_data("people.txt", people)
-    write_data("drinks.txt", drinks)
+# def save_and_exit():
+#     write_data("people.txt", people)
+#     write_data("drinks.txt", drinks)
+#     write_data("prefs.txt", prefs)
 
 
-# id:name
-people = read_data("people.txt")
-
-# id:name
-drinks = read_data("drinks.txt")
-
-# person:drink
-favs = {}
+people = get_people()
+drinks = get_drinks()
+prefs = {}
 
 
 def cls():
     os.system("clear")
 
 
-def print_table(some_dict, title):
+def print_dict(some_dict, title, prop):
     cls()
     print(title.upper())
     print('-'*30)
     for key, val in some_dict.items():
-        print(key, val)
-        print()
+        print(getattr(key, prop), "\t"+getattr(val, prop))
+
+
+def print_list(some_list, title, prop):
+    cls()
+    print(title.upper())
+    print('-'*30)
+    idx = 0
+    for item in some_list:
+        print(idx, "\t" + getattr(item, prop))
+        idx += 1
 
 
 def create_person(name):
-    people.update({len(people): name})
+    people.append(Person(name))
+
+
+def create_drink(name):
+    drinks.append(Drink(name))
 
 
 menu = """
@@ -67,13 +74,14 @@ Please choose an option:
 
 [1] List All People
 [2] List All Drinks
-[3] List All Favourites
+[3] List All Preferences
 [4] Create Person
-[5] Select Person's Favourite
-[6] Exit
+[5] Create Drink
+[6] Create Preference
+[7] Exit
 
 """
-exit_option = 6
+exit_option = 7
 
 
 cls()
@@ -85,38 +93,43 @@ while True:
         print('Plese enter a number')
 
     if option == 1:
-        print_table(people, 'People')
+        print_list(people, "People", "name")
     elif option == 2:
-        print_table(drinks, 'Drinks')
+        print_list(drinks, "Drinks", "name")
     elif option == 3:
-        print_table(favs, 'Favourites')
+        print_dict(prefs, "Preferences", "name")
     elif option == 4:
         new_person = input("Please enter name: ")
         create_person(new_person)
     elif option == 5:
+        new_drink = input("Please enter name: ")
+        create_drink(new_drink)
+    elif option == 6:
 
-        person_id = None
-        drink_id = None
+        selected_person = None
+        selected_drink = None
 
-        print_table(people, 'People')
-        while person_id not in people.keys():
+        print_list(people, "People", "name")
+        while selected_person == None:
             try:
                 person_id = int(input("Please choose a person: "))
-            except ValueError:
-                print('Please enter a number')
+                selected_person = people[person_id]
+            except:
+                pass
 
-        print_table(drinks, 'Drinks')
-        while drink_id not in drinks.keys():
+        print_list(drinks, "Drinks", "name")
+
+        while selected_drink == None:
             try:
                 drink_id = int(input("Please choose a drink: "))
-            except ValueError:
-                print('Please enter a number')
+                selected_drink = drinks[drink_id]
+            except:
+                pass
 
-        person_val = people.get(person_id)
-        drink_val = drinks.get(drink_id)
-        favs.update({person_val: drink_val})
+        new_pref = Preference(selected_person, selected_drink)
+        prefs.update({new_pref.person: new_pref.drink})
 
     elif option == exit_option:
         break
 
-save_and_exit()
+# save_and_exit()
