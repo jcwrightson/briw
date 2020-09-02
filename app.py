@@ -169,7 +169,7 @@ while True:
                 # If user entered a letter, or chose an idx that doesn't exist
                 print("Invalid choice...")
 
-        # STEP #1
+        # STEP #2
         # =========================================
         # Show user avail drinks in the drinks list
         print_list(drinks, "Drinks", "name")
