@@ -158,7 +158,7 @@ while True:
         # Show user avail ppl in the people list
         print_list(people, "People", "name")
 
-        # While they haven't selected a valid option
+        # While they haven't selected a valid person
         while selected_person == None:
             try:
                 # Prompt user to select a person's idx
@@ -174,7 +174,7 @@ while True:
         # Show user avail drinks in the drinks list
         print_list(drinks, "Drinks", "name")
 
-        # While they haven't selected a valid option
+        # While they haven't selected a valid drink
         while selected_drink == None:
             try:
                 # Prompt user to select a drink's idx
