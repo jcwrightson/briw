@@ -122,7 +122,10 @@ while True:
         print('Please enter a number')
 
     # If user entered a valid option we make it here
-    if option == 1:
+    if option == exit_option:
+        # Break out the loop if user selects `exit_option`
+        break
+    elif option == 1:
         print_list(people, "People", "name")  # Show list of ppl
     elif option == 2:
         print_list(drinks, "Drinks", "name")  # Show list of drinks
@@ -186,10 +189,6 @@ while True:
         # ==========================================
         # Call create pref function to create a Preference and update dictionary
         create_pref(selected_person, selected_drink)
-
-    elif option == exit_option:
-        # Break out the loop if user selects `exit_option`
-        break
 
 
 # Last thing we do before app terminates
