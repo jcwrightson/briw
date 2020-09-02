@@ -1,6 +1,7 @@
 import os
 
 from classes import Person, Drink, Preference, Round
+from helpers import write_list, clear_screen, print_dict, print_list
 
 
 def read_lines(file_name):
@@ -28,37 +29,23 @@ def get_drinks():
     return data
 
 
-# def save_and_exit():
-#     write_data("people.txt", people)
-#     write_data("drinks.txt", drinks)
-#     write_data("prefs.txt", prefs)
+def save_people():
+    write_list("people.txt", people, "name")
+
+
+def save_drinks():
+    write_list("drinks.txt", drinks, "name")
+
+
+def save_and_exit():
+    save_people()
+    save_drinks()
+    exit()
 
 
 people = get_people()
 drinks = get_drinks()
 prefs = {}
-
-
-def cls():
-    os.system("clear")
-
-
-def print_dict(some_dict, title, prop):
-    cls()
-    print(title.upper())
-    print('-'*30)
-    for key, val in some_dict.items():
-        print(getattr(key, prop), "\t"+getattr(val, prop))
-
-
-def print_list(some_list, title, prop):
-    cls()
-    print(title.upper())
-    print('-'*30)
-    idx = 0
-    for item in some_list:
-        print(idx, "\t" + getattr(item, prop))
-        idx += 1
 
 
 def create_person(name):
@@ -83,14 +70,12 @@ Please choose an option:
 """
 exit_option = 7
 
-
-cls()
 while True:
     option = 0
     try:
         option = int(input(menu))
     except ValueError:
-        print('Plese enter a number')
+        print('Please enter a number')
 
     if option == 1:
         print_list(people, "People", "name")
@@ -101,9 +86,11 @@ while True:
     elif option == 4:
         new_person = input("Please enter name: ")
         create_person(new_person)
+        save_people()
     elif option == 5:
         new_drink = input("Please enter name: ")
         create_drink(new_drink)
+        save_drinks()
     elif option == 6:
 
         selected_person = None
@@ -115,7 +102,7 @@ while True:
                 person_id = int(input("Please choose a person: "))
                 selected_person = people[person_id]
             except:
-                pass
+                print("Invalid choice...")
 
         print_list(drinks, "Drinks", "name")
 
@@ -124,7 +111,7 @@ while True:
                 drink_id = int(input("Please choose a drink: "))
                 selected_drink = drinks[drink_id]
             except:
-                pass
+                print("Invalid choice...")
 
         new_pref = Preference(selected_person, selected_drink)
         prefs.update({new_pref.person: new_pref.drink})
@@ -132,4 +119,4 @@ while True:
     elif option == exit_option:
         break
 
-# save_and_exit()
+save_and_exit()
