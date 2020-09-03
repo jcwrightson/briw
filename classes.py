@@ -8,6 +8,7 @@ class Person:
         return str(self.id) + "\t" + self.name + "\t" + str(self.age)
 
 
+
 class Drink:
     def __init__(self, id, name):
         self.name = name
@@ -23,7 +24,7 @@ class Preference:
         self.drink = drink
 
     def __str__(self):
-        return self.person.name + "\t" + self.drink.name
+        return self.person.__str__() + "\t" + self.drink.__str__()
 
 
 class Round:
