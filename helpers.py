@@ -11,7 +11,7 @@ def print_list(some_list, title, prop):
     print('-'*30)
     idx = 0
     for item in some_list:
-        print(idx, "\t" + getattr(item, prop))
+        print(idx, "\t", item)
         idx += 1
 
 
@@ -20,7 +20,8 @@ def print_prefs(prefs):
     print("PREFERENCES")
     print('-'*30)
     for pref in prefs.values():
-        print(pref.person.name, "\t", pref.drink.name)
+        print(pref)
+
 
 def read_lines(file_name):
     try:
@@ -29,6 +30,7 @@ def read_lines(file_name):
     except:
         return []
     return lines
+
 
 def write_list(file_name, the_list, prop):
     try:
