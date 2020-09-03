@@ -5,7 +5,7 @@ def clear_screen():
     os.system("clear")
 
 
-def print_list(some_list, title, prop):
+def print_list(some_list, title):
     clear_screen()
     print(title.upper())
     print('-'*30)

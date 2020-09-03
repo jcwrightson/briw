@@ -126,9 +126,9 @@ while True:
         # Break out the loop if user selects `exit_option`
         break
     elif option == 1:
-        print_list(people, "People", "name")  # Show list of ppl
+        print_list(people, "People")  # Show list of ppl
     elif option == 2:
-        print_list(drinks, "Drinks", "name")  # Show list of drinks
+        print_list(drinks, "Drinks")  # Show list of drinks
     elif option == 3:
         print_prefs(prefs)  # Show list of prefs
     elif option == 4:
