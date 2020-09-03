@@ -1,7 +1,7 @@
 import os
 
 from classes import Person, Drink, Preference, Round
-from helpers import read_rows, read_lines, write_list, clear_screen, print_list, write_rows
+from helpers import read_rows, clear_screen, print_list, write_rows
 
 # ============================================
 # Define functions

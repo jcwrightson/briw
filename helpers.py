@@ -65,25 +65,6 @@ def read_rows(filename):
     return rows
 
 
-def read_lines(file_name):
-    try:
-        the_file = open(file_name, "r")
-        lines = the_file.readlines()
-    except:
-        return []
-    return lines
-
-
-def write_list(file_name, the_list, prop):
-    try:
-        the_file = open(file_name, "w")
-
-        for item in the_list:
-            the_file.write(getattr(item, prop) + "\n")
-    finally:
-        the_file.close()
-
-
 def write_rows(file_name, rows, fields):
 
     def build_row(row):
