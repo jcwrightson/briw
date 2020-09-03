@@ -1,7 +1,7 @@
 import os
 
 from classes import Person, Drink, Preference, Round
-from helpers import read_lines, write_list, clear_screen, print_list, print_prefs
+from helpers import read_rows, read_lines, write_list, clear_screen, print_list, write_rows
 
 # ============================================
 # Define functions
@@ -10,20 +10,17 @@ from helpers import read_lines, write_list, clear_screen, print_list, print_pref
 
 def get_people():
 
-    # get lines of text from file as a list
-    lines = read_lines("people.txt")
-
     # Create an empty list
     data = []
 
-    # Iterate over each line
-    for line in lines:
+    # get rows of data from our file
+    rows = read_rows("people.csv")
 
-        # Remove the `\n` char from the line leaving us just the text we want (a person's name)
-        name = line.strip()
+    # Iterate over each row we get back from `read_rows`
+    for row in rows:
 
-        # Create a `Person` object using this saved name
-        saved_person = Person(name)
+        # Create a `Person` object using the `id`, and `name` stored in the row: ['123', 'Bob']
+        saved_person = Person(int(row[0]), row[1], int(row[2]))
 
         # add this to our temp list
         data.append(saved_person)
@@ -33,19 +30,26 @@ def get_people():
 
 
 def get_drinks():
-    lines = read_lines("drinks.txt")
+
     data = []
-    for line in lines:
-        data.append(Drink(line.strip()))
+
+    rows = read_rows("drinks.csv")
+
+    for row in rows:
+
+        saved_drink = Drink(int(row[0]), row[1])
+
+        data.append(saved_drink)
+
     return data
 
 
 def save_people():
-    write_list("people.txt", people, "name")
+    write_rows('people.csv', people, ["id", "name", "age"])
 
 
 def save_drinks():
-    write_list("drinks.txt", drinks, "name")
+    write_rows('drinks.csv', drinks, ["id", "name"])
 
 
 def save_and_exit():
@@ -54,25 +58,44 @@ def save_and_exit():
     exit()
 
 
-def create_person(name: str):
-    # Create a new `Person` using the class constructor method
-    new_person = Person(name)
+def create_person():
 
-    # Append this `Person` to our list of `people`
+    # Prompt user to enter name
+    name = input("Please enter name: ")
+
+    # Create `age` variable
+    age = None
+
+    # While user hasn't entered a valid age
+    while age == None:
+        try:
+            # Prompt user to enter age
+            age = int(input("Please enter age: "))
+        except:
+            print('Pease try again')
+
+    # Create a new `Person` using the class constructor method
+    new_person = Person(len(people), name, age)
+
+    # Append this `Person` to the end of our list of `people`
     people.append(new_person)
 
 
-def create_drink(name: str):
-    # Create a new `Drink` using the class constructor method
-    new_drink = Drink(name)
+def create_drink():
 
-    # Append this `Drink` to our list of `drinks`
+    # Prompt user to enter name
+    name = input("Please enter name: ")
+
+    # Create a new `Drink` using the class constructor method
+    new_drink = Drink(len(drinks), name)
+
+    # Append this `Drink` to the end our list of `drinks`
     drinks.append(new_drink)
 
 
 def create_pref(person: Person, drink: Drink):
     # A dictionary is a unique `key: value` data store
-    # Let's use the name of our person as the key, and the Preference object as the value
+    # Let's use the name of our `Person` as the key, and the `Preference` object as the value
 
     # e.g: "John" : { person: { name: "John" }, drink: { name: "Beer" } }
     new_dict_item = {person.name: Preference(person, drink)}
@@ -126,18 +149,16 @@ while True:
         # Break out the loop if user selects `exit_option`
         break
     elif option == 1:
-        print_list(people, "People", "name")  # Show list of ppl
+        print_list(people, "people")  # Show list of ppl
     elif option == 2:
-        print_list(drinks, "Drinks", "name")  # Show list of drinks
+        print_list(drinks, "drinks")  # Show list of drinks
     elif option == 3:
-        print_prefs(prefs)  # Show list of prefs
+        print_list(prefs, "prefs", True)  # Show list of prefs
     elif option == 4:
-        name = input("Please enter name: ")
-        create_person(name)
+        create_person()
         save_people()  # Update saved ppl file (optional)
     elif option == 5:
-        name = input("Please enter name: ")
-        create_drink(name)
+        create_drink()
         save_drinks()  # Update saved drinks file (optional)
     elif option == 6:
 
@@ -156,7 +177,7 @@ while True:
         # STEP #1
         # =========================================
         # Show user avail ppl in the people list
-        print_list(people, "People", "name")
+        print_list(people, "people")
 
         # While they haven't selected a valid person
         while selected_person == None:
@@ -172,7 +193,7 @@ while True:
         # STEP #2
         # =========================================
         # Show user avail drinks in the drinks list
-        print_list(drinks, "Drinks", "name")
+        print_list(drinks, "drinks")
 
         # While they haven't selected a valid drink
         while selected_drink == None:

@@ -1,17 +1,29 @@
 class Person:
-    def __init__(self, name):
+    def __init__(self, id, name, age=0):
         self.name = name
+        self.id = id
+        self.age = age
+
+    def __str__(self):
+        return str(self.id) + "\t" + self.name + "\t" + str(self.age)
 
 
 class Drink:
-    def __init__(self, name):
+    def __init__(self, id, name):
         self.name = name
+        self.id = id
+
+    def __str__(self):
+        return str(self.id) + "\t" + self.name
 
 
 class Preference:
     def __init__(self, person, drink):
         self.person = person
         self.drink = drink
+
+    def __str__(self):
+        return self.person.name + "\t" + self.drink.name
 
 
 class Round:
