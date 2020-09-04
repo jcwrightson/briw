@@ -6,13 +6,13 @@ def clear_screen():
     os.system("clear")
 
 
-def print_list(the_list, title, is_dictionary=False):
+def print_table(the_dict: dict, title: str):
 
-    # Check if the list is empty
-    if len(the_list) == 0:
+    # Check if the dictionary is empty
+    if len(the_dict) == 0:
         print("----empty----")
 
-        # early return as to not execute the rest of the function for an empty list
+        # early return as to not execute the rest of the function for an empty dict
         return
 
     # Clear screen
@@ -24,23 +24,14 @@ def print_list(the_list, title, is_dictionary=False):
     # Print spacer line
     print('-'*50)
 
-    # reassign to local variable
-    items = the_list
-
-    # Check if list is actually a dictionary
-    if is_dictionary == True:
-
-        # reassign `items` to be a list of `values` from the dictionary
-        items = the_list.values()
-
     # Iterate through each object in the list
-    for item in items:
+    for item in the_dict.values():
 
         # Indirectly call the `__str__` method on the object to get it's values as a string so we can print it: `id`, `name` etc...
         print(item)
 
 
-def read_rows(filename):
+def read_rows(filename: str):
 
     # Create empty list
     rows = []
@@ -55,7 +46,7 @@ def read_rows(filename):
             # Iterate and read each row
             for row in reader:
 
-                # Append each row read to out temp list
+                # Append each row read to our temp list
                 rows.append(row)
 
     except FileNotFoundError:
@@ -65,7 +56,7 @@ def read_rows(filename):
     return rows
 
 
-def write_rows(file_name, rows, fields):
+def write_rows(file_name: str, rows: dict, fields: list):
 
     def build_row(row):
         r = []
@@ -74,7 +65,20 @@ def write_rows(file_name, rows, fields):
         return r
 
     with open(file_name, 'w', newline='\n') as csvfile:
+
         writer = csv.writer(csvfile)
 
-        for row in rows:
+        for row in rows.values():
+
             writer.writerow(build_row(row))
+
+
+def write_prefs(file_name: str, prefs: dict):
+
+    with open(file_name, 'w', newline='\n') as csvfile:
+
+        writer = csv.writer(csvfile)
+
+        for pref in prefs.values():
+
+            writer.writerow([pref.person.id, pref.drink.id])
