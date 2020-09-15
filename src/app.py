@@ -11,13 +11,14 @@ from src.core.core import (
     create_pref,
     get_drinks,
     get_people,
-    get_prefs
+    get_prefs,
 )
+
+from src.persistence.db import db, get_data
 
 # ============================================
 # Define functions
 # ============================================
-
 
 
 def save_people(people: dict):
@@ -41,6 +42,8 @@ def save_and_exit(people, drinks, prefs):
         print("Saved.")
     except Exception as e:
         print(f"Failed to save {e}")
+
+    mydb.close()
     exit()
 
 
@@ -67,15 +70,23 @@ people = {}
 drinks = {}
 prefs = {}
 
+# DB Handle
+mydb = db()
+result = get_data(mydb, "drink")
+print(result)
+
+
 # ============================================
 # Start App
 # ============================================
 
 
 def refetch():
+
     global people
     global drinks
     global prefs
+
     people = get_people()
     drinks = get_drinks()
     prefs = get_prefs(people, drinks)
@@ -84,7 +95,7 @@ def refetch():
 def main():
 
     # Clear Screen
-    clear_screen()
+    # clear_screen()
 
     # Fetch Data
     refetch()
