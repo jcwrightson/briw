@@ -1,34 +1,4 @@
-import os
 import csv
-
-
-def clear_screen():
-    os.system("clear")
-
-
-def print_table(the_dict: dict, title: str):
-
-    # Check if the dictionary is empty
-    if len(the_dict) == 0:
-        print("----empty----")
-
-        # early return as to not execute the rest of the function for an empty dict
-        return
-
-    # Clear screen
-    clear_screen()
-
-    # Print the title as uppercase
-    print(title.upper())
-
-    # Print spacer line
-    print('-'*50)
-
-    # Iterate through each object in the list
-    for item in the_dict.values():
-
-        # Indirectly call the `__str__` method on the object to get it's values as a string so we can print it: `id`, `name` etc...
-        print(item)
 
 
 def read_rows(filename: str):
@@ -57,14 +27,13 @@ def read_rows(filename: str):
 
 
 def write_rows(file_name: str, rows: dict, fields: list):
-
     def build_row(row):
         r = []
         for field in fields:
             r.append(getattr(row, field))
         return r
 
-    with open(file_name, 'w', newline='\n') as csvfile:
+    with open(file_name, "w", newline="\n") as csvfile:
 
         writer = csv.writer(csvfile)
 
@@ -75,10 +44,33 @@ def write_rows(file_name: str, rows: dict, fields: list):
 
 def write_prefs(file_name: str, prefs: dict):
 
-    with open(file_name, 'w', newline='\n') as csvfile:
+    with open(file_name, "w", newline="\n") as csvfile:
 
         writer = csv.writer(csvfile)
 
         for pref in prefs.values():
 
             writer.writerow([pref.person.id, pref.drink.id])
+
+
+def read_data_as_dict():
+    data = {}
+    with open("names.csv", newline="") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            data.update({row["uid"]: row})
+    return data
+
+
+def write_data_as_dict(the_dict, fieldnames):
+    with open("names.csv", newline="", mode="w") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in the_dict:
+            writer.writerow(row)
+
+
+def get_field_names(the_dict):
+    key = list(the_dict.keys())[0]
+    record = the_dict.get(key)
+    return list(record.keys())
