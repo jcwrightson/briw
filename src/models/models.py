@@ -1,17 +1,19 @@
 class Person:
-    def __init__(self, id, forename, surname):
-        self.forname = forename
+    def __init__(self, id, forename, surname, drink_id=None):
+        self.forename = forename
         self.surname = surname
         self.id = id
+        self.drink_id = drink_id
 
     def __str__(self):
-        return f"{self.id} \t {self.forename} {self.surname}"
+        return f"{self.id} \t {self.forename} {self.surname} \t {self.drink_id}"
 
 
 class Drink:
-    def __init__(self, id, name, price):
+    def __init__(self, id, name, description, price):
         self.id = id
         self.name = name
+        self.description = description
         self.price = price
 
     def __str__(self):

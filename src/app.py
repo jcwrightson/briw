@@ -1,8 +1,6 @@
 import os
 
-from src.constants import PEOPLE_FILE, DRINKS_FILE, PREFS_FILE
 from src.models.models import Person, Drink, Preference, Round
-from src.persistence.files import write_rows, write_prefs
 from src.core.core import (
     clear_screen,
     print_table,
@@ -14,37 +12,7 @@ from src.core.core import (
     get_prefs,
 )
 
-from src.persistence.db import db, get_data
-
-# ============================================
-# Define functions
-# ============================================
-
-
-def save_people(people: dict):
-    write_rows(PEOPLE_FILE, people, ["id", "name", "age"])
-
-
-def save_drinks(drinks: dict):
-    write_rows(DRINKS_FILE, drinks, ["id", "name"])
-
-
-def save_prefs(prefs: dict):
-    write_prefs(PREFS_FILE, prefs)
-
-
-def save_and_exit(people, drinks, prefs):
-
-    try:
-        save_people(people)
-        save_drinks(drinks)
-        save_prefs(prefs)
-        print("Saved.")
-    except Exception as e:
-        print(f"Failed to save {e}")
-
-    mydb.close()
-    exit()
+from src.persist.db import db, get_data
 
 
 # ============================================
@@ -70,35 +38,30 @@ people = {}
 drinks = {}
 prefs = {}
 
-# DB Handle
-mydb = db()
-result = get_data(mydb, "drink")
-print(result)
-
 
 # ============================================
 # Start App
 # ============================================
 
+# DB Handle
+mydb = db("33066", "root", "insecure", "briw")
 
-def refetch():
+
+def fetch():
 
     global people
     global drinks
     global prefs
 
-    people = get_people()
-    drinks = get_drinks()
-    prefs = get_prefs(people, drinks)
+    people = get_people(mydb)
+    drinks = get_drinks(mydb)
+    prefs = get_prefs(mydb, people, drinks)
 
 
 def main():
 
-    # Clear Screen
-    # clear_screen()
-
     # Fetch Data
-    refetch()
+    fetch()
 
     # Create infinite loop
     while True:
@@ -124,29 +87,20 @@ def main():
         elif option == 3:
             print_table(prefs, "prefs")  # Show list of prefs
         elif option == 4:
-            # Prompt user to enter name
-            name = input("Please enter name: ")
 
-            # Create `age` variable
-            age = None
+            forename = input("Please enter Forename: ")
+            surname = input("Please enter Surname: ")
+            create_person(mydb, forename, surname)
+            fetch()
 
-            # While user hasn't entered a valid age
-            while age == None:
-                try:
-                    # Prompt user to enter age
-                    age = int(input("Please enter age: "))
-                except:
-                    print("Pease try again")
-
-            create_person(name, age, people)
-            save_people(people)  # Update saved ppl file (optional)
-            refetch()
         elif option == 5:
             # Prompt user to enter name
             name = input("Please enter name: ")
-            create_drink(name, drinks)
-            save_drinks(drinks)  # Update saved drinks file (optional)
-            refetch()
+            description = input("Please enter description (enter for none): ")
+            price = float(input("Please enter price: "))
+            create_drink(mydb, name, description, price)
+            fetch()
+
         elif option == 6:
 
             # Create Preference Object: { person: Person, drink: Drink }
@@ -170,7 +124,7 @@ def main():
             while selected_person == None:
                 try:
                     # Prompt user to select a person's id
-                    person_id = input("Please choose a person: ")
+                    person_id = int(input("Please choose a person: "))
                     # Get that element from the person dict
                     selected_person = people[person_id]
                 except:
@@ -186,7 +140,7 @@ def main():
             while selected_drink == None:
                 try:
                     # Prompt user to select a drink's id
-                    drink_id = input("Please choose a drink: ")
+                    drink_id = int(input("Please choose a drink: "))
                     # Get that element from the drink dict
                     selected_drink = drinks[drink_id]
                 except:
@@ -196,13 +150,11 @@ def main():
             # STEP #3 and #4
             # ==========================================
             # Call create pref function to create a Preference and update dictionary
-            create_pref(selected_person, selected_drink, prefs)
-            save_prefs(prefs)
-            refetch()
-    # Last thing we do before app terminates
-    save_and_exit(people, drinks, prefs)
+            create_pref(mydb, selected_person, selected_drink)
+            fetch()
 
 
 if __name__ == "__main__":
 
     main()
+    mydb.close()
