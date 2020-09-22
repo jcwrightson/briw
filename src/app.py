@@ -17,8 +17,6 @@ from src.core.core import (
 
 from src.persist.db import db, get_data
 
-database = os.environ.get("mysql_db")
-
 
 # ============================================
 # Instantiate variables
@@ -49,6 +47,7 @@ prefs = {}
 # ============================================
 
 # DB Handle
+database = os.environ.get("mysql_db")
 mydb = db(database)
 
 
