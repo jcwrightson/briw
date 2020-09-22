@@ -1,5 +1,6 @@
 __pycache__
-/.venv
-/.vscode
+.venv
+.vscode
+.pytest_cache
 *.txt
 *.csv
