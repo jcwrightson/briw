@@ -1,9 +1,8 @@
 import os
 import csv
 
-from src.constants import PEOPLE_FILE, DRINKS_FILE, PREFS_FILE
 from src.models.models import Person, Drink, Preference
-from src.persistence.files import read_rows
+from src.persist.db import get_data, query, update
 
 
 def clear_screen():
@@ -35,59 +34,39 @@ def print_table(the_dict: dict, title: str):
         print(item)
 
 
-def create_person(name, age, the_dict):
+def create_person(mydb, forename, surname):
 
-    # Create a new `Person` using the class constructor method
-    new_person = Person(len(the_dict), name, age)
+    sql = "INSERT INTO person (forename, surname) values (%s, %s)"
 
-    # Add this `Person` to our dictionary of `people`
-    the_dict.update({new_person.id: new_person})
-
-    return new_person
+    update(mydb, sql, (forename, surname))
 
 
-def create_drink(name, the_dict):
+def create_drink(mydb, name, description, price):
 
-    # Create a new `Drink` using the class constructor method
-    new_drink = Drink(len(the_dict), name)
+    sql = "INSERT INTO drink (name, description, price) values (%s, %s, %s)"
 
-    # Append this `Drink` to our dictionary of `drinks`
-    the_dict.update({new_drink.id: new_drink})
-
-    return new_drink
+    update(mydb, sql, (name, description, price))
 
 
-def create_pref(person: Person, drink: Drink, the_dict: dict):
-    # A dictionary is a unique `key: value` data store
-    # Let's use the id of our `Person` as the key, and the `Preference` object as the value
+def create_pref(mydb, person, drink):
 
-    new_pref = Preference(person, drink)
+    sql = "UPDATE person SET drink = %s WHERE id = %s"
 
-    # e.g: "2" : { person: { name: "John" }, drink: { name: "Beer" } }
-    # new_dict_item = {person.id: new_pref}
-
-    # Update dictionary
-    the_dict.update({new_pref.person.id: new_pref})
-
-    return new_pref
+    update(mydb, sql, (drink.id, person.id))
 
 
-def get_prefs(people, drinks):
+def get_prefs(mydb, people, drinks):
 
     data = {}
 
-    rows = read_rows(PREFS_FILE)
+    sql = "SELECT * FROM person p JOIN drink d ON p.drink = d.id"
+
+    rows = query(mydb, sql)
 
     for row in rows:
 
-        # each `row` looks like ['0','1']
-        # row[0] is the id of the `Person` and row[1] is the id of the `Drink`
-
-        # Swap `Person` id for a `Person` obj from our `people` dict
-        person = people.get(row[0])
-
-        # Do the same for `Drink`
-        drink = drinks.get(row[1])
+        person = Person(row[0], row[1], row[2], row[3])
+        drink = Drink(row[4], row[5], row[6], row[7])
 
         # Create `Preference` from these two objects
         saved_pref = Preference(person, drink)
@@ -98,19 +77,19 @@ def get_prefs(people, drinks):
     return data
 
 
-def get_people():
+def get_people(mydb):
 
     # Create an empty list
     data = {}
 
     # get rows of data from our file
-    rows = read_rows(PEOPLE_FILE)
+    rows = get_data(mydb, "person")
 
     # Iterate over each row we get back from `read_rows`
     for row in rows:
 
         # Create a `Person` object using the `id`, and `name` stored in the row: ['123', 'Bob']
-        saved_person = Person(row[0], row[1], int(row[2]))
+        saved_person = Person(row[0], row[1], row[2], row[3])
 
         # add this to our temp dict
         data.update({saved_person.id: saved_person})
@@ -119,15 +98,15 @@ def get_people():
     return data
 
 
-def get_drinks():
+def get_drinks(mydb):
 
     data = {}
 
-    rows = read_rows(DRINKS_FILE)
+    rows = get_data(mydb, "drink")
 
     for row in rows:
 
-        saved_drink = Drink(row[0], row[1])
+        saved_drink = Drink(row[0], row[1], row[2], row[3])
 
         data.update({saved_drink.id: saved_drink})
 

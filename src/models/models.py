@@ -1,20 +1,23 @@
 class Person:
-    def __init__(self, id, name, age=0):
-        self.name = name
+    def __init__(self, id, forename, surname, drink_id=None):
+        self.forename = forename
+        self.surname = surname
         self.id = id
-        self.age = age
+        self.drink_id = drink_id
 
     def __str__(self):
-        return str(self.id)+ "\t" + self.name + "\t\t" + str(self.age)
+        return f"{self.id} \t {self.forename} {self.surname} \t {self.drink_id}"
 
 
 class Drink:
-    def __init__(self, id, name):
-        self.name = name
+    def __init__(self, id, name, description, price):
         self.id = id
+        self.name = name
+        self.description = description
+        self.price = price
 
     def __str__(self):
-        return str(self.id) + "\t\t" + self.name
+        return f"{self.id} \t {self.name} \t\t £{self.price}"
 
 
 class Preference:
@@ -23,7 +26,7 @@ class Preference:
         self.drink = drink
 
     def __str__(self):
-        return self.person.name + "\t\t" + self.drink.name
+        return f"{self.person.forename} {self.person.surname} \t\t {self.drink.name}"
 
 
 class Round:
