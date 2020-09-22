@@ -55,7 +55,7 @@ def create_pref(mydb, person, drink):
     update(mydb, sql, (drink.id, person.id))
 
 
-def get_prefs(mydb, people, drinks):
+def get_prefs(mydb):
 
     data = {}
 

@@ -59,7 +59,7 @@ def fetch():
 
     people = get_people(mydb)
     drinks = get_drinks(mydb)
-    prefs = get_prefs(mydb, people, drinks)
+    prefs = get_prefs(mydb)
 
 
 def main():
