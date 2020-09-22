@@ -1,7 +1,13 @@
 import mysql.connector
+import os
 
+from dotenv import load_dotenv
+load_dotenv()
 
-def db(port: str, user: str, password: str, database: str):
+def db(database: str):
+    port = os.environ.get("mysql_port")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
     try:
         return mysql.connector.connect(
             port=port, user=user, password=password, database=database

@@ -12,7 +12,7 @@ class TestCreateDrink(unittest.TestCase):
         """
 
         # Act
-        mydb = db("33066", "root", "insecure", "briw_test")
+        mydb = db("briw_test")
         create_drink(mydb, "Beer", None, 2)
         result = get_data(mydb, "drink")
         row = result[0]

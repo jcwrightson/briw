@@ -1,5 +1,8 @@
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from src.models.models import Person, Drink, Preference, Round
 from src.core.core import (
     clear_screen,
@@ -13,6 +16,8 @@ from src.core.core import (
 )
 
 from src.persist.db import db, get_data
+
+database = os.environ.get("mysql_db")
 
 
 # ============================================
@@ -44,7 +49,7 @@ prefs = {}
 # ============================================
 
 # DB Handle
-mydb = db("33066", "root", "insecure", "briw")
+mydb = db(database)
 
 
 def fetch():

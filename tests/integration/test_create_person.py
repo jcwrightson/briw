@@ -12,7 +12,7 @@ class TestCreatePerson(unittest.TestCase):
         """
 
         # Act
-        mydb = db("33066", "root", "insecure", "briw_test")
+        mydb = db("briw_test")
         create_person(mydb, "John", "Smith")
         result = get_data(mydb, "person")
         row = result[0]
