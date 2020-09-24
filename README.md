@@ -13,9 +13,9 @@ mysql_db
 
 # Dependencies
 
-Create virtual env: `python -m venv .venv`
-Activate venv by running: `.venv/Scripts/activate`
-Deps are defined in `requirements.txt`. Run `pip install -r requirements.txt` to install these
+- Create virtual env: `python -m venv .venv`
+- Activate venv by running: `.venv/Scripts/activate`
+- Deps are defined in `requirements.txt`. Run `pip install -r requirements.txt` to install these
 
 # Running
 
