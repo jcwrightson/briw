@@ -1,4 +1,6 @@
 mysql
-mysql.connector
+mysql-connector
 mysql-connector-python
 python-dotenv
+pylint
+black
